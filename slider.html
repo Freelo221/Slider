@@ -6,109 +6,68 @@
         initial-scale=1.0, 
         user-scalable=no" />
     <title>Rangeslider</title>
+    <script type="" src="./rangeslider.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <!-- <script type="module" src="./rangeslider.js"></script> -->
-    <script type="module" src="./test.js"></script>
+    <link rel="stylesheet" href="./rangeSlider.css">
+    <script>
+        $(document).ready(function() {
 
-    <style>
-        #container {
-            width: 500px;
-            height: 30px;
-            background-color: #eaeaea;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            touch-action: none;
-            position: relative;
-            overflow: visible;
-            margin: 0 auto;
-            margin-top: 50px;
-        }
-        
-        #item,
-        .item {
-            width: 0px;
-            height: 0px;
-            padding: 25px;
-            border: 7px solid rgba(136, 136, 136, .5);
-            border-radius: 50%;
-            touch-action: none;
-            user-select: none;
-            position: relative;
-            z-index: 1;
-        }
-        
-        #item:active {
-            border: 10px solid rgba(168, 218, 220, 1.00);
-        }
-        
-        #item:hover {
-            cursor: pointer;
-        }
-        
-        .track {
-            height: 20%;
-            width: 100%;
-            background: #666;
-            position: absolute;
-            top: auto;
-            bottom: auto;
-            margin: 0 auto;
-        }
-        
-        .sliderBreak {
-            background-color: #666;
-            border-radius: 50%;
-            height: 0px;
-            width: 0px;
-            padding: 1px;
-            scale: 10;
-            position: absolute;
-        }
-        
-        .sliderFront {
-            width: 10px;
-            height: 100%;
-            position: absolute;
-            background-color: #eaeaea;
-            left: -10px;
-            border-radius: 50% 0px 0px 50%;
-        }
-        
-        .sliderBack {
-            width: 10px;
-            height: 100%;
-            position: absolute;
-            background-color: #eaeaea;
-            right: -10px;
-            border-radius: 0px 50% 50% 0px;
-        }
-    </style>
+
+            const x = new RangeSlider({
+                element: "container",
+                output: "SliderValueOutput",
+            });
+
+            const y = new RangeSlider({
+                element: "container2", //container element id*
+                output: "SliderValueOutput2", //output element id*/ background 
+                min: 5000, //min slider value
+                max: 8000, //max slider value
+                step: 1000, //step slider value
+                start: 1, //Preselected Dot (0-X)
+                color: "#000", // background color
+                width: "500px", //element width as string - unit*
+                height: "30px", // element height as string - unit*
+                unit: " mm", // output + unit ---  3000 mm
+                highlightColor: "#ccc", //current dot highlight color
+                highlight: true, //highlight current dot
+                SliderHandle: { //optional
+                    dragItemHeight: "50px", //sliderhandler height as string unit*
+                    dragItemWidth: "50px", //sliderhandler width as string unit*
+                    borderWidth: "5px", //sliderhandler border width as string unit*
+                    borderColor: "red" //sliderhandler border color as string unit*
+                },
+                SliderTrack: { //optional
+                    height: "20%", //slidertrack height as string unit*
+                    background: "#fff" //slidertrack background
+                },
+                SliderDots: { //optional
+                    scale: 10, //sliderdots scale (height = scale / 2)
+                    color: "#fff", //sliderdots color
+                    form: "square" //sliderdots form - square 
+                },
+                FrontItem: { //optional 
+                    show: true,
+                    width: "30px", //frontitem width as string unit*
+                    offset: "-30px", //frontitem offset as string unit*
+                    color: "#001", //frontitem color 
+                },
+                BackItem: {
+                    show: true,
+                    width: "30px", //backitem width as string unit*
+                    offset: "-30px", //backitem offset as string unit*
+                    color: "#001", //backitem color 
+                }
+            });
+        })
+    </script>
 </head>
 
 <body>
-
     <div id="outerContainer">
-        <div id="container" min="5000" max="8000" step="1000">
-            <!-- <div class="track"></div>
-            <div class="sliderFront"></div>
-            <div class="sliderBack"></div> -->
-
-
-
-            <!-- <div class="sliderBreak"></div>
-            <div class="sliderBreak"></div>
-            <div class="sliderBreak"></div>
-            <div class="sliderBreak"></div>
-            <div class="sliderBreak"></div> -->
-
-
-
-            <!-- <div id="item">
-
-            </div> -->
+        <div class="mcSliderContainer" id="container">
         </div>
         <div class="container">
             <div class="row">
@@ -117,192 +76,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="mcSliderContainer" id="container2">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 m-auto mt-5">
+                    <p id="SliderValueOutput2" class="text-center">Value: 5000</p>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <script>
-        // var min, max, step;
-        // var posAll = [];
-        // var valuesall = [];
-        // var PointWidth;
-
-
-
-        $(document).ready(function() {
-
-
-            // min = $("#container").attr("min");
-            // max = $("#container").attr("max");
-            // step = $("#container").attr("step");
-            // count = (max - min) / step;
-
-            // for (var i = 0; i <= count; i++) {
-            //     var pos = (100 / ((max - min) / step)) * i;
-            //     posAll.push(pos);
-            //     valuesall.push(i * step);
-            //     if (i == 0) {
-            //         $("#container").append("<div style='left: calc(" + pos + "%') class='sliderBreak'></div>");
-            //     } else if (i == count) {
-            //         $("#container").append("<div style='left: calc(" + pos + "% - 0px') class='sliderBreak'></div>");
-            //     } else {
-            //         $("#container").append("<div style='left: calc(" + pos + "% - 0px') class='sliderBreak'></div>");
-            //     }
-            // }
-
-            // pointWidth = $(".sliderBreak")[0].getBoundingClientRect().height;
-            // SnapToGrid(container.offsetWidth / 3, 0, dragItem);
-
-        })
-
-        // var dragItem = document.querySelector("#item");
-        // var container = document.querySelector("#container");
-
-        // var dragItemHeight = dragItem.offsetHeight;
-        // var dragItemWidth = dragItem.offsetWidth;
-
-        // var currentPos = 0;
-        // var active = false;
-        // var currentX;
-        // var currentY;
-        // var initialX;
-        // var initialY;
-        // var xOffset = 0;
-        // var yOffset = 0;
-
-        // container.addEventListener("touchstart", dragStart, false);
-        // container.addEventListener("touchend", dragEnd, false);
-        // container.addEventListener("touchmove", drag, false);
-
-        // container.addEventListener("mousedown", dragStart, false);
-        // container.addEventListener("mouseup", dragEnd, false);
-        // container.addEventListener("mousemove", drag, false);
-
-
-        // container.addEventListener('click', printMousePos, true);
-
-
-        // function printMousePos(e) {
-        //     var rect = e.target.getBoundingClientRect();
-        //     var x = e.clientX - rect.left;
-        //     var y = e.clientY - rect.top;
-        //     SnapToGrid(x, 0, dragItem);
-        //     console.log("Left? : " + x + " ; Top? : " + y + ".");
-        // }
-
-        // function dragStart(e) {
-
-        //     if (e.type === "touchstart") {
-        //         initialX = e.touches[0].clientX - xOffset;
-        //         initialY = e.touches[0].clientY - yOffset;
-        //     } else {
-        //         initialX = e.clientX - xOffset;
-        //         initialY = e.clientY - yOffset;
-        //     }
-
-        //     if (e.target === dragItem) {
-        //         active = true;
-        //     }
-        // }
-
-        // function dragEnd(e) {
-
-
-        //     if (currentX <= 0) {
-        //         currentX = 0;
-        //     }
-        //     // console.log(currentX);
-        //     // if (currentX >= 400) {
-        //     //     currentX = container.offsetWidth - 30;
-        //     // }
-        //     SnapToGrid(currentX);
-        //     // setTranslate(currentX, 0, dragItem);
-        //     active = false;
-        // }
-
-        // function drag(e) {
-        //     if (active) {
-
-        //         e.preventDefault();
-
-        //         if (e.type === "touchmove") {
-        //             currentX = e.touches[0].clientX - initialX;
-        //             // console.log(currentX);
-        //             // currentY = e.touches[0].clientY - initialY;
-        //         } else {
-        //             currentX = e.clientX - initialX;
-        //             console.log(currentX);
-        //             // currentY = e.clientY - initialY;
-        //         }
-
-
-        //         // yOffset = currentY;
-        //         $(".track").css("width", (container.offsetWidth - (Math.abs(currentX - container.offsetWidth)) + (dragItemWidth / 2)));
-        //         setTranslate(currentX, 0, dragItem);
-        //     }
-        // }
-
-        // function setTranslate(xPos, yPos, el) {
-        //     // initialX = xPos
-        //     el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
-        //     $(".track").css("width", (container.offsetWidth - (Math.abs(xPos - container.offsetWidth)) + (dragItemWidth / 2)));
-        //     console.log(parseInt(valuesall[currentPos]) + parseInt(min));
-        //     $("#SliderValueOutput").text(valuesall[currentPos] + parseInt(min));
-        // }
-
-
-        // SnapToGrid = function(posX) {
-        //         var finalPos = 0;
-        //         $(posAll).each(function(i, elem) {
-        //             let curPoint = container.offsetWidth * (elem / 100);
-
-        //             if (posX > curPoint) {
-
-        //                 if (i != posAll.length) {
-        //                     let offsetPrevPoint = posX - ((posAll[i] / 100) * container.offsetWidth);
-        //                     console.log("offset1: " + offsetPrevPoint);
-        //                     let offsetNextPoint = ((posAll[i + 1] / 100) * container.offsetWidth) - posX;
-        //                     console.log("offset2: " + offsetNextPoint);
-        //                     if (offsetNextPoint > offsetPrevPoint) {
-        //                         if (i == 0) {
-        //                             finalPos = ((0 - (dragItemWidth / 2)) + 0) + 1
-        //                             currentPos = 0;
-        //                             xOffset = finalPos;
-        //                         } else {
-        //                             finalPos = (posAll[i] / 100) * container.offsetWidth - dragItemWidth / 2 + 1;
-        //                             currentPos = i;
-        //                             xOffset = finalPos;
-        //                         }
-
-        //                     } else {
-        //                         finalPos = (posAll[i + 1] / 100) * container.offsetWidth - dragItemWidth / 2 + 1;
-        //                         currentPos = i + 1;
-        //                         xOffset = finalPos + 0;
-        //                         if ((posAll[i + 1] / 100) * container.offsetWidth == 500) {
-        //                             // finalPos = ((posAll[i + 1] / 100) * container.offsetWidth - (dragItemWidth / 2) - pointWidth + 0 + 1);
-        //                             finalPos = ((posAll[i + 1] / 100) * container.offsetWidth - (dragItemWidth / 2) + 0 + 1);
-        //                             currentPos = i + 1;
-        //                             xOffset = finalPos + 0;
-        //                         }
-        //                     }
-
-        //                 }
-
-
-        //             } else {
-        //                 if (i == 0) {
-        //                     finalPos = ((0 - (dragItemWidth / 2)) + 0 + 1)
-        //                     currentPos = 0;
-        //                     xOffset = finalPos;
-        //                     console.log("asdasd");
-        //                 }
-        //             }
-
-        //         })
-
-        //         setTranslate(finalPos, 0, dragItem);
-        //         initialX = finalPos;
-        //     }
-        // })
-    </script>
 </body>
 
 </html>
