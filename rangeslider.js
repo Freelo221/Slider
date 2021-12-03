@@ -4,19 +4,52 @@ class RangeSlider {
         this.base = base;
         const baseElement = document.querySelector("#" + base.element);
         const outputElement = document.querySelector("#" + base.output);
+        this.container = baseElement;
 
-        base.min ? this.min = base.min : this.min = 0;
-        base.max ? this.max = base.max : this.max = 5;
-        base.step ? this.step = base.step : this.step = 1;
-        base.start ? this.startPos = base.start : this.startPos = 2;
+        // base.min ? this.min = base.min : this.min = 0;
+        // base.max ? this.max = base.max : this.max = 5;
+        // base.step ? this.step = base.step : this.step = 1;
+        // base.start ? this.startPos = base.start : this.startPos = 2;
+        // base.unit ? this.unit = base.unit : this.unit = "";
+        // base.highlightColor ? this.highlightColor = base.highlightColor : this.highlightColor = "red";
+        // base.highlight ? this.highlight = base.highlight : this.highlight = false;
 
-        base.unit ? this.unit = base.unit : this.unit = "";
 
-        base.highlightColor ? this.highlightColor = base.highlightColor : this.highlightColor = "red";
-        base.highlight ? this.highlight = base.highlight : this.highlight = false;
-        if (base.SliderDots) {
-            base.SliderDots.color ? this.DotColor = base.SliderDots.color : this.DotColor = "#ccc";
-        }
+        //Base Level
+        this.min = (base.min ? base.min : 0);
+        this.max = (base.max ? base.max : 5);
+        this.step = (base.step ? base.step : 1);
+        this.start = (base.start ? base.start : 2);
+
+        this.unit = (base.unit ? base.unit : "");
+        this.highlightColor = (base.highlightColor ? base.highlightColor : "red");
+        this.highlight = (base.highlight ? base.highlight : false);
+
+        //Dot Level
+        this.dotScale = (base.SliderDots ? (base.SliderDots.scale ? base.SliderDots.scale : 10) : 10);
+        this.dotsShow = (base.SliderDots ? (base.SliderDots.show ? base.SliderDots.show : true) : true);
+        this.dotsStep = (base.SliderDots ? (base.SliderDots.step ? base.SliderDots.step : true) : true);
+        this.dotColor = (base.SliderDots ? (base.SliderDots.color ? base.SliderDots.color : "#ccc") : "#ccc");
+        this.dotForm = (base.SliderDots ? (base.SliderDots.form ? base.SliderDots.form : "circle") : "circle");
+        this.DotCustomElement = (base.SliderDots ? (base.SliderDots.DotCustomElement ? base.SliderDots.DotCustomElement : null) : null);
+
+        //Extra Level 1
+        this.DotsFirstElement = base.SliderDots ? (base.SliderDots.firstElement ? (base.SliderDots.firstElement.show ? base.SliderDots.firstElement.show : true) : true) : true;
+        this.DotCustomFirstElement = base.SliderDots ? (base.SliderDots.firstElement ? (base.SliderDots.firstElement.customElement ? base.SliderDots.firstElement.customElement : null) : null) : null;
+
+        //Extra Level 2
+        this.DotsLastElement = base.SliderDots ? (base.SliderDots.lastElement ? (base.SliderDots.lastElement.show ? base.SliderDots.lastElement.show : true) : true) : true;
+        this.DotCustomLastElement = base.SliderDots ? (base.SliderDots.lastElement ? (base.SliderDots.lastElement.customElement ? base.SliderDots.lastElement.customElement : null) : null) : null;
+
+        //Offset Level
+        this.DotOffsetTop = base.SliderDots ? (base.SliderDots.offset ? (base.SliderDots.offset.top ? base.SliderDots.offset.top : "0px") : "0px") : "0px";
+        this.DotOffsetBottom = base.SliderDots ? (base.SliderDots.offset ? (base.SliderDots.offset.bottom ? base.SliderDots.offset.top : "0px") : "0px") : "0px";
+        this.DotOffsetLeft = base.SliderDots ? (base.SliderDots.offset ? (base.SliderDots.offset.left ? base.SliderDots.offset.top : "0px") : "0px") : "0px";
+        this.DotOffsetRight = base.SliderDots ? (base.SliderDots.offset ? (base.SliderDots.offset.right ? base.SliderDots.offset.top : "0px") : "0px") : "0px";
+
+        //Track Level
+        this.sliderTrackHeight = (base.SliderTrack ? (base.SliderTrack.height ? base.SliderTrack.height : "20%") : "20%");
+        this.sliderTrackBackground = (base.SliderTrack ? (base.SliderTrack.background ? base.SliderTrack.background : "red") : "red");
 
         this.currentPos = 0;
         this.active = false;
@@ -41,14 +74,7 @@ class RangeSlider {
 
 
         //Slider Track Element
-        let sliderTrack = document.createElement('div');
-        sliderTrack.classList.add("track");
-        if (base.SliderTrack) {
-            sliderTrack.style.height = base.SliderTrack.height;
-            sliderTrack.style.background = base.SliderTrack.background;
-        }
-        baseElement.appendChild(sliderTrack);
-
+        this.InitSliderTrack();
 
 
         //Slider Front Element
@@ -63,9 +89,8 @@ class RangeSlider {
                 sliderFront.style.background = base.FrontItem.color;
             }
         }
-
         baseElement.appendChild(sliderFront);
-
+        this.frontItem = sliderFront;
 
         //Slider Back Element
         let sliderBack = document.createElement('div');
@@ -79,29 +104,18 @@ class RangeSlider {
                 sliderBack.style.background = base.BackItem.color;
             }
         }
-
         baseElement.appendChild(sliderBack);
-
-        //Slider Drag Element
-        let sliderHandle = document.createElement('div');
-        sliderHandle.classList.add("SliderHandle");
-        sliderHandle.setAttribute("id", "item");
-        if (base.SliderHandle) {
-            sliderHandle.style.height = base.SliderHandle.dragItemHeight;
-            sliderHandle.style.width = base.SliderHandle.dragItemWidth;
-            sliderHandle.style.border = base.SliderHandle.borderWidth + " solid " + base.SliderHandle.borderColor;
-        }
-
-        baseElement.appendChild(sliderHandle);
-
-
-        this.container = baseElement;
-        this.output = outputElement;
-        this.dragItem = sliderHandle;
-
-        this.trackItem = sliderTrack;
-        this.frontItem = sliderFront;
         this.backItem = sliderBack;
+        //
+        this.InitSliderHandle();
+
+
+
+        this.output = outputElement;
+
+
+
+
 
         this.dragItemHeight = this.dragItem.offsetHeight;
         this.dragItemWidth = this.dragItem.offsetWidth;
@@ -111,60 +125,13 @@ class RangeSlider {
         this.xOffset = 0;
         this.yOffset = 0;
 
-        let count = (this.max - this.min) / this.step;
 
-        for (var i = 0; i <= count; i++) {
 
-            var pos = (100 / ((this.max - this.min) / this.step)) * i;
-            this.posAll.push(pos);
-            this.valuesall.push(i * this.step);
-            if (i == 0) {
-                let elem = document.createElement('div');
-                elem.classList.add('sliderBreak');
-                elem.setAttribute('style', 'left: calc(' + pos + '%'); //mb add some offset
-                if (base.SliderDots) {
-                    elem.style.scale = base.SliderDots.scale;
-                    elem.style.background = base.SliderDots.color;
-                    if (base.SliderDots.form == "square") {
-                        elem.style.borderRadius = "0%";
-                    } else {
 
-                    }
-                }
-                baseElement.appendChild(elem);
-                this.dotList.push(elem);
-            } else if (i == count) {
-                let elem = document.createElement('div');
-                elem.classList.add('sliderBreak');
-                elem.setAttribute('style', 'left: calc(' + pos + '%'); //mb add some offset
-                if (base.SliderDots) {
-                    elem.style.scale = base.SliderDots.scale;
-                    elem.style.background = base.SliderDots.color;
-                    if (base.SliderDots.form == "square") {
-                        elem.style.borderRadius = "0%";
-                    } else {
 
-                    }
-                }
-                baseElement.appendChild(elem);
-                this.dotList.push(elem);
-            } else {
-                let elem = document.createElement('div');
-                elem.classList.add('sliderBreak');
-                elem.setAttribute('style', 'left: calc(' + pos + '%'); //mb add some offset
-                if (base.SliderDots) {
-                    elem.style.scale = base.SliderDots.scale;
-                    elem.style.background = base.SliderDots.color;
-                    if (base.SliderDots.form == "square") {
-                        elem.style.borderRadius = "0%";
-                    } else {
 
-                    }
-                }
-                baseElement.appendChild(elem);
-                this.dotList.push(elem);
-            }
-        }
+        this.InitBreakDots();
+
         this.pointWidth = document.querySelector("#" + base.element + " .sliderBreak").getBoundingClientRect().width;
         this.SnapToGrid(this.container.offsetWidth * this.posAll[this.startPos] / 100);
 
@@ -294,7 +261,7 @@ class RangeSlider {
     HighlightDot() {
         this.dotList.forEach((elem, i) => {
             if (this.highlight) {
-                elem.style.background = this.DotColor;
+                elem.style.background = this.dotColor;
             }
             elem.classList.remove("active");
 
@@ -310,5 +277,90 @@ class RangeSlider {
 
 
 
+
+
     }
+
+
+    InitBreakDots = () => {
+        let count = (this.max - this.min) / this.step;
+
+        for (var i = 0; i <= count; i++) {
+            var pos = (100 / ((this.max - this.min) / this.step)) * i;
+            this.posAll.push(pos);
+            this.valuesall.push(i * this.step);
+            if (i == 0) {
+                let elem = document.createElement('div');
+                elem.classList.add('sliderBreak');
+                elem.setAttribute('style', 'left: calc(' + pos + '%'); //mb add some offset
+                // if (base.SliderDots) {
+                elem.style.scale = this.dotScale;
+                elem.style.background = this.dotColor;
+                if (this.dotForm == "square") {
+                    elem.style.borderRadius = "0%";
+                } else {
+
+                }
+                // }
+                this.container.appendChild(elem);
+                this.dotList.push(elem);
+            } else if (i == count) {
+                let elem = document.createElement('div');
+                elem.classList.add('sliderBreak');
+                elem.setAttribute('style', 'left: calc(' + pos + '%'); //mb add some offset
+                // if (base.SliderDots) {
+                elem.style.scale = this.dotScale;
+                elem.style.background = this.dotColor;
+                if (this.dotForm == "square") {
+                    elem.style.borderRadius = "0%";
+                } else {
+
+                }
+                // }
+                this.container.appendChild(elem);
+                this.dotList.push(elem);
+            } else {
+                let elem = document.createElement('div');
+                elem.classList.add('sliderBreak');
+                elem.setAttribute('style', 'left: calc(' + pos + '%'); //mb add some offset
+                // if (base.SliderDots) {
+                elem.style.scale = this.dotScale;
+                elem.style.background = this.dotColor;
+                if (this.dotForm == "square") {
+                    elem.style.borderRadius = "0%";
+                } else {
+
+                }
+                // }
+                this.container.appendChild(elem);
+                this.dotList.push(elem);
+            }
+        }
+    }
+
+    InitSliderHandle = () => {
+        //Slider Drag Element
+        let sliderHandle = document.createElement('div');
+        sliderHandle.classList.add("SliderHandle");
+        sliderHandle.setAttribute("id", "item");
+
+        // sliderHandle.style.height = base.SliderHandle.dragItemHeight;
+        // sliderHandle.style.width = base.SliderHandle.dragItemWidth;
+        sliderHandle.style.border = this.sliderHandleBorderWidth + " solid " + this.sliderHandleBorderColor;
+
+        this.container.appendChild(sliderHandle);
+        this.dragItem = sliderHandle;
+    }
+
+    InitSliderTrack = () => {
+        let sliderTrack = document.createElement('div');
+        sliderTrack.classList.add("track");
+        // if (base.SliderTrack) {
+        sliderTrack.style.height = this.sliderTrackHeight;
+        sliderTrack.style.background = this.sliderTrackBackground;
+        // }
+        this.container.appendChild(sliderTrack);
+        this.trackItem = sliderTrack;
+    }
+
 }
